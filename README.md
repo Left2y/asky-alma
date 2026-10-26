@@ -95,10 +95,14 @@ npm test
 ASKY_PLUGIN_RUNNER='/path/to/AgentRuntime/dist/src/plugin-runner.js' npm test
 ```
 
-交付验证：在 Asky 随包 Node v22.23.3 上，`npm run check` 与 25 项测试全部通过（含真实 Asky runner，无跳过）。此前上游 Swift `PluginManifest.validate(at:)` 也已通过；本次 manifest 未改动，未重复运行 Swift 校验。上游校验器方法与 JSONValue 原样复用，仅对宿主错误／本地化类型提供最小桩。在 Alma 0.4.214 的独立测试线程中，以 `noTools:true` 完成两轮真实聊天、同一线程的上下文续聊及写回读核实。没有实等四分钟；超时恢复路径用缩短期限的真实 HTTP／WS mock 验证。未通过 Asky UI 实际安装，也未验证 macOS 打开后窗口可见性。
+交付验证：在 Asky 随包 Node v22.23.3 上，`npm run check` 与 25 项测试全部通过（含真实 Asky runner，无跳过）。此前上游 Swift `PluginManifest.validate(at:)` 也已通过；本次 manifest 仅新增 `icon` 字段，已通过离线 manifest 校验，未重复运行 Swift 校验。上游校验器方法与 JSONValue 原样复用，仅对宿主错误／本地化类型提供最小桩。在 Alma 0.4.214 的独立测试线程中，以 `noTools:true` 完成两轮真实聊天、同一线程的上下文续聊及写回读核实。没有实等四分钟；超时恢复路径用缩短期限的真实 HTTP／WS mock 验证。未通过 Asky UI 实际安装，也未验证 macOS 打开后窗口可见性。
 
 不提供默认执行的真实 Alma 测试，以免意外发消息。维护者可在独立测试线程使用代码工厂的 `noTools:true` 做无工具协议核验；该选项不暴露为用户配置。测试辅助文件都使用临时目录，真实线程 ID、日志和配置不得放进仓库。
 
 ## 发布文件
 
-仓库根目录包含 `asky-plugin.json`、`index.mjs`、`SKILL.md`、`README.md`、`LICENSE`、`package.json`、`.gitignore`，以及 `test/`、`scripts/`。不含构建产物、配置、真实状态或依赖目录。发布到 `https://github.com/Left2y/asky-alma` 的默认分支根目录；无需构建。MIT 许可。
+仓库根目录包含 `asky-plugin.json`、`index.mjs`、`SKILL.md`、`README.md`、`LICENSE`、`package.json`、`.gitignore`，以及 `assets/`、`test/`、`scripts/`。不含构建产物、配置、真实状态或依赖目录。发布到 `https://github.com/Left2y/asky-alma` 的默认分支根目录；无需构建。插件代码采用 MIT 许可。
+
+`assets/alma.png` 从本机 Alma.app 的真实应用图标 `Contents/Resources/icon.icns` 导出（512×512 PNG）。图标及相关权利归 Alma 及其权利人所有，不属于本插件原创或 MIT 许可的代码资产。
+
+在上述 Asky 提交中，`PluginSettings.swift` 读取插件 `icon`，但 `LauncherView.swift` 对 `plugin-*` 命令／结果项固定使用 `LauncherFunctionIcon(kind: .plugin)`。因此此版本的命令行 item 仍显示通用工具图标，需要 Asky 宿主支持才能使用 Alma 图标。
