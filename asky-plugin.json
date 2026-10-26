@@ -1,0 +1,38 @@
+{
+  "id": "alma",
+  "name": "Alma",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "entry": "index.mjs",
+  "instructions": "SKILL.md",
+  "tools": [
+    {
+      "name": "chat",
+      "description": "与本机 Alma 持久会话聊天。普通输入续聊；/new 新会话；/status、/reply、/history、/threads 查询；/use ID 切换插件会话；/stop 停止；/open 在 Alma 打开；/help 帮助。超时后只查询，不自动重发。",
+      "effect": "write",
+      "confirmation": "explicitDirectOtherwiseConfirm",
+      "timeoutSeconds": 240,
+      "inputSchema": {
+        "type": "object",
+        "properties": {"input": {"type": "string"}},
+        "required": ["input"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "query",
+      "description": "只读查询插件当前 Alma 会话。what 可为 status、reply、history、threads、help；不发送、不创建、不停止。",
+      "effect": "read",
+      "confirmation": "never",
+      "timeoutSeconds": 20,
+      "inputSchema": {
+        "type": "object",
+        "properties": {"what": {"type": "string", "enum": ["status", "reply", "history", "threads", "help"]}},
+        "additionalProperties": false
+      }
+    }
+  ],
+  "commands": [
+    {"name": "alma", "title": "Alma · 持久会话", "subtitle": "输入问题续聊；/help 查看命令；回车执行", "keyword": "alma", "tool": "chat", "mode": "action", "queryArgument": "input"}
+  ]
+}

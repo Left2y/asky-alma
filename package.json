@@ -1,0 +1,13 @@
+{
+  "name": "asky-plugin-alma",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Asky 与本机 Alma 持久会话插件，无运行依赖",
+  "engines": {"node": ">=22.4.0"},
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check index.mjs && node scripts/validate-manifest.mjs"
+  }
+}
